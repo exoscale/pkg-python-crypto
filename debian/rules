@@ -1,0 +1,29 @@
+#!/usr/bin/make -f
+
+# build with -O3 (as upstream does) if noopt is not set
+ifeq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+export DEB_CFLAGS_MAINT_APPEND=-O3
+endif
+
+%:
+	dh $@ --with=python2,python3 --buildsystem=pybuild
+
+override_dh_clean:
+	# Keep LEGAL/copy/LICENSE.orig
+	dh_clean -XLEGAL/copy/LICENSE.orig
+
+override_dh_auto_build-indep:
+	pybuild --build -p $(shell pyversions -vd)
+	pybuild -s custom --build -p $(shell pyversions -vd) \
+		--build-args="env PYTHONPATH={build_dir} epydoc --config Doc/epydoc-config"
+
+override_dh_auto_test-arch:
+	dh_auto_test -- -s custom --test-args="{interpreter} setup.py test"
+
+# no test and install for indep
+override_dh_auto_install-indep override_dh_auto_test-indep:
+
+
+override_dh_strip:
+	dh_strip -X"python3" --dbg-package=python-crypto-dbg
+	dh_strip -X"python2" --dbg-package=python3-crypto-dbg
