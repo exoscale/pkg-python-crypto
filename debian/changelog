@@ -1,3 +1,12 @@
+python-crypto (2.6.1-6build1~precise0+exo1) precise; urgency=medium
+
+  * Backport for Precise.
+    + Drop Python 3 support.
+    + Don't build documentation.
+    + Don't use pybuild.
+
+ -- Vincent Bernat <bernat@debian.org>  Mon, 20 Jun 2016 10:59:21 +0200
+
 python-crypto (2.6.1-6build1) xenial; urgency=medium
 
   * No-change rebuild to drop python3.4 support.
