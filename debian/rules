@@ -10,3 +10,7 @@ endif
 
 override_dh_strip:
 	dh_strip --dbg-package=python-crypto-dbg
+
+override_dh_auto_test:
+	python setup.py test
+
